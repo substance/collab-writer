@@ -7,8 +7,7 @@
 /* Using url here, so font-awesome does not get bundled. */
 @import url('./font-awesome/css/font-awesome.min.css');
 
-/* comment */
-@import '../node_modules/simple-writer/comment/_comment.css';
-/* simple-writer*/
-@import '../node_modules/simple-writer/_simple-writer.css';
+/* SimpleWriter styles */
+@import '../node_modules/simple-writer/simple-writer.css';
+
 body { overflow: hidden; }

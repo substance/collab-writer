@@ -1,8 +1,8 @@
-# SimpleWriter
+# CollabWriter
 
-SimpleWriter is the official Substance starter example. It includes a minimal [setup for realtime collaboration](./server.js). It sets up a minimal environment for Substance editor development. Fork this code and create your own editor.
+CollabWriter sets up a minimal [realtime collaboration infrastructure](./server.js).
 
-Read the [tutorial](http://substance.io/docs/beta5/your-first-editor.html).
+STATUS: Experimental
 
 ## Install
 
@@ -13,4 +13,5 @@ $ npm run build
 $ npm start
 ```
 
-And navigate to `http://localhost:5555`.
+- Open two browser windows at `http://localhost:7777`.
+- Start typing and see the changes in realtime in the other window.

@@ -2,8 +2,7 @@
   "name": "collab-writer",
   "description": "Reference implementation for a collaborative editor",
   "dependencies": {
-    "lodash": "^4.14.1",
-    "substance": "substance/substance#configurable-collab-server",
+    "substance": "substance/substance#develop",
     "simple-writer": "substance/simple-writer#develop",
     "rollup-plugin-node-resolve": "*"
   },
@@ -12,7 +11,8 @@
     "substance-bundler": "0.5.1",
     "express": "4.14.0",
     "ws": "1.1.1",
-    "rollup": "*"
+    "rollup": "*",
+    "rollup-plugin-node-resolve": "*"
   },
   "scripts": {
     "build": "node make",

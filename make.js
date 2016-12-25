@@ -1,6 +1,5 @@
 var b = require('substance-bundler');
-var nodeResolve = require('rollup-plugin-node-resolve');
-
+var resolve = require('rollup-plugin-node-resolve')
 
 b.task('clean', function() {
   b.rm('./dist')
@@ -12,52 +11,63 @@ b.task('assets', function() {
   b.copy('node_modules/font-awesome', './dist/font-awesome')
 })
 
-// this optional task makes it easier to work on Substance core
-b.task('substance', function() {
-  b.make('substance', 'clean', 'browser', 'server')
+b.task('simple-writer', function() {
+  b.make('simple-writer')
 })
 
-b.task('build-client', ['substance', 'clean', 'assets'], function() {
+// this optional task makes it easier to work on Substance core
+// b.task('substance', function() {
+//   b.make('substance')
+// })
+
+b.task('build-client', ['assets'], function() {
   // Copy Substance
   b.copy('node_modules/substance/dist', './dist/substance')
   b.copy('app/index.html', './dist/index.html')
+
+  // NOTE: this creates an single-file bundle including the app
+  // and the substance lib
   b.js('app/app.js', {
-    external: ['substance'],
-    commonjs: { include: ['node_modules/lodash/**'] },
     dest: './dist/app.js',
+    plugins: [
+      resolve({
+        // Needs to be enabled so substance-cheerio gets ignored
+        browser: true,
+        // – see https://github.com/rollup/rollup/wiki/jsnext:main
+        module: true,
+        jsnext: true
+      })
+    ],
     format: 'umd',
     moduleName: 'app'
   })
 })
 
 b.task('build-server', function() {
-  // Copy Substance
+  // NOTE: We need to use the prebundled cjs version of substance
+  // and can't create a single-file bundle like for the client.
+  // The reason is that the server-version of Substance depends
+  // on substance-cheerio which does not have a jsnext:main
+  // entry point yet.
   b.js('server.js', {
     external: ['substance', 'express', 'ws', 'path', 'http'],
-    // commonjs: { include: ['node_modules/lodash/**'] },
-    dest: './server.cjs.js',
     plugins: [
-      nodeResolve({
-        // use "module" field for ES6 module if possible
-        module: true, // Default: true
-        // use "jsnext:main" if possible
+      resolve({
         // – see https://github.com/rollup/rollup/wiki/jsnext:main
-        jsnext: true,  // Default: false
-        // use "main" field or index.js, even if it's not an ES6 module
-        // needs to be converted from CommonJS to ES6
-        // – see https://github.com/rollup/rollup-plugin-commonjs
-        main: true,  // Default: true
-        // not all files you want to resolve are .js files
-        extensions: [ '.js', '.json' ],  // Default: ['.js']
+        module: true,
+        jsnext: true
       })
     ],
+    dest: './server.cjs.js',
     format: 'cjs',
     moduleName: 'collab-writer'
   })
 })
 
+b.task('build', ['clean', 'simple-writer', 'build-client', 'build-server'])
+
 // build all
-b.task('default', ['build-client', 'build-server'])
+b.task('default', ['build'])
 
 // starts a server when CLI argument '-s' is set
 b.setServerPort(5555)
