@@ -27,7 +27,7 @@ $ npm run dev
 Open a separate terminal window and run node.
 
 ```js
-$ node  server.cjs.js
+$ node server.cjs.js
 ```
 
 We recommend that you start the server with a visual debugger, such as devtool.
