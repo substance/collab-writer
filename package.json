@@ -13,7 +13,8 @@
   },
   "scripts": {
     "build": "node make",
-    "start": "node server.cjs.js "
+    "dev": "node make dev:build -w",
+    "start": "node server.cjs.js"
   },
   "version": "1.0.0-beta.6"
 }
