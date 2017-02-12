@@ -49,8 +49,6 @@ b.serve({
   In dev mode no ES5 transforms are made
 */
 function _client(devMode) {
-  console.info('Building client.... Devmode: ', devMode)
-  console.info('######################################')
   b.css('./app/app.css', 'dist/app.css', { variables: true })
   b.js('app/app.js', {
     target: {
@@ -66,8 +64,6 @@ function _client(devMode) {
   In dev mode no ES5 transforms are made
 */
 function _server(devMode) {
-  console.info('Building server... Devmode: ', devMode)
-  console.info('######################################')
   b.js('server.js', {
     external: ['express', 'ws', 'path', 'http'],
     target: {
