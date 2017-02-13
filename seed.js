@@ -1,5 +1,5 @@
 import { Configurator, JSONConverter, documentHelpers, series } from 'substance'
-import { SimpleWriterPackage } from 'simple-writer'
+import { SimpleWriterPackage } from 'substance-simple-writer'
 import htmlFixture from './app/fixture'
 
 /*

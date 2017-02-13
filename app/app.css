@@ -8,6 +8,6 @@
 @import url('./font-awesome/css/font-awesome.min.css');
 
 /* SimpleWriter styles */
-@import '../node_modules/simple-writer/simple-writer.css';
+@import '../node_modules/substance-simple-writer/simple-writer.css';
 
 body { overflow: hidden; }
