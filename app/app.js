@@ -47,9 +47,9 @@ cfg.import(SimpleWriterPackage)
 window.onload = function() {
   documentClient.getDocument(EXAMPLE_DOCUMENT_ID, function(err, docRecord) {
     if (err) throw new Error(err)
-
     let doc = cfg.createArticle()
-    jsonConverter.importDocument(doc, docRecord.data)
+    jsonConverter.importDocument(doc, JSON.parse(docRecord.data))
+    debugger
     let collabSession = new CollabSession(doc, {
       configurator: cfg,
       documentId: EXAMPLE_DOCUMENT_ID,
