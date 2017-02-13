@@ -3,7 +3,7 @@ import {
   JSONConverter, DocumentClient, CollabSession
 } from 'substance'
 
-import { SimpleWriter, SimpleWriterPackage } from 'simple-writer/index.es.js'
+import { SimpleWriter, SimpleWriterPackage } from 'substance-simple-writer/index.es.js'
 
 /*
   Configuration

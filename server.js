@@ -5,7 +5,6 @@ import http from 'http'
 import { Server as WebSocketServer } from 'ws'
 import seed from './seed'
 
-
 /*
   CollabServerPackage provides an in-memory backend for testing purposes.
   For real applications, please provide a custom package here, which configures

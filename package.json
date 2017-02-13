@@ -1,22 +1,20 @@
 {
-  "name": "collab-writer",
+  "name": "substance-collab-writer",
   "description": "Reference implementation for a collaborative editor",
   "dependencies": {
-    "substance": "substance/substance#develop",
-    "simple-writer": "substance/simple-writer#develop",
-    "rollup-plugin-node-resolve": "*"
+    "substance": "1.0.0-beta.6",
+    "substance-simple-writer": "1.0.0-beta.6"
   },
   "devDependencies": {
     "font-awesome": "4.5.0",
-    "substance-bundler": "0.5.1",
+    "substance-bundler": "0.7.2",
     "express": "4.14.0",
-    "ws": "1.1.1",
-    "rollup": "*",
-    "rollup-plugin-node-resolve": "*"
+    "ws": "1.1.1"
   },
   "scripts": {
     "build": "node make",
-    "start": "node server.cjs.js "
+    "dev": "node make dev:build -w",
+    "start": "node server.cjs.js"
   },
   "version": "1.0.0-beta.6"
 }

@@ -1,72 +1,42 @@
-var b = require('substance-bundler');
-var resolve = require('rollup-plugin-node-resolve')
+var b = require('substance-bundler')
+let path = require('path')
 
+/*
+  Sub-tasks
+*/
 b.task('clean', function() {
   b.rm('./dist')
 })
 
-// copy assets
 b.task('assets', function() {
-  b.css('./app/app.css', 'dist/app.css', { variables: true })
-  b.copy('node_modules/font-awesome', './dist/font-awesome')
-})
-
-b.task('simple-writer', function() {
-  b.make('simple-writer')
-})
-
-// this optional task makes it easier to work on Substance core
-// b.task('substance', function() {
-//   b.make('substance')
-// })
-
-b.task('build-client', ['assets'], function() {
-  // Copy Substance
-  b.copy('node_modules/substance/dist', './dist/substance')
+  b.copy('./node_modules/font-awesome', './dist/font-awesome')
   b.copy('app/index.html', './dist/index.html')
-
-  // NOTE: this creates an single-file bundle including the app
-  // and the substance lib
-  b.js('app/app.js', {
-    dest: './dist/app.js',
-    plugins: [
-      resolve({
-        // Needs to be enabled so substance-cheerio gets ignored
-        browser: true,
-        // – see https://github.com/rollup/rollup/wiki/jsnext:main
-        module: true,
-        jsnext: true
-      })
-    ],
-    format: 'umd',
-    moduleName: 'app'
-  })
 })
 
-b.task('build-server', function() {
-  // NOTE: We need to use the prebundled cjs version of substance
-  // and can't create a single-file bundle like for the client.
-  // The reason is that the server-version of Substance depends
-  // on substance-cheerio which does not have a jsnext:main
-  // entry point yet.
-  b.js('server.js', {
-    external: ['substance', 'express', 'ws', 'path', 'http'],
-    plugins: [
-      resolve({
-        // – see https://github.com/rollup/rollup/wiki/jsnext:main
-        module: true,
-        jsnext: true
-      })
-    ],
-    dest: './server.cjs.js',
-    format: 'cjs',
-    moduleName: 'collab-writer'
-  })
+/*
+  Core tasks
+*/
+b.task('client', ['assets'], function() {
+  _client(false)
 })
 
-b.task('build', ['clean', 'simple-writer', 'build-client', 'build-server'])
+b.task('dev:client', ['assets'], function() {
+  _client(true)
+})
 
-// build all
+b.task('server', function() {
+  _server(false)
+})
+
+b.task('dev:server', function() {
+  _server(true)
+})
+
+/*
+  Full build tasks
+*/
+b.task('build', ['clean', 'client', 'server'])
+b.task('dev:build', ['clean', 'dev:client', 'dev:server'])
 b.task('default', ['build'])
 
 // starts a server when CLI argument '-s' is set
@@ -74,3 +44,33 @@ b.setServerPort(5555)
 b.serve({
   static: true, route: '/', folder: 'dist'
 })
+
+/*
+  In dev mode no ES5 transforms are made
+*/
+function _client(devMode) {
+  b.css('./app/app.css', 'dist/app.css', { variables: true })
+  b.js('app/app.js', {
+    target: {
+      dest: './dist/app.js',
+      format: 'umd',
+      moduleName: 'app'
+    },
+    buble: !devMode
+  })
+}
+
+/*
+  In dev mode no ES5 transforms are made
+*/
+function _server(devMode) {
+  b.js('server.js', {
+    external: ['express', 'ws', 'path', 'http'],
+    target: {
+      dest: './server.cjs.js',
+      format: 'cjs',
+      moduleName: 'collab-writer'
+    },
+    buble: !devMode
+  })
+}
