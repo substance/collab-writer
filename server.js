@@ -1,4 +1,8 @@
-import { DocumentServer, CollabServer, CollabServerPackage, CollabServerConfigurator, series } from 'substance'
+import {
+  DocumentServer, CollabServer, CollabServerPackage, CollabServerConfigurator,
+  DocumentChange, series
+} from 'substance'
+import { SimpleWriterPackage } from 'substance-simple-writer'
 import express from 'express'
 import path from 'path'
 import http from 'http'
@@ -11,7 +15,29 @@ import seed from './seed'
   a database backend.
 */
 let cfg = new CollabServerConfigurator()
+cfg.import(SimpleWriterPackage)
+
+// Sets up in-memory stores for changes and snapshots
 cfg.import(CollabServerPackage)
+
+function snapshotBuilder(rawSnapshot, changes) {
+  let doc
+  if (rawSnapshot) {
+    let htmlImporter = cfg.createImporter('html')
+    doc = htmlImporter.importDocument(rawSnapshot)
+  } else {
+    doc = cfg.createArticle()
+  }
+  changes.forEach((change) => {
+    change = DocumentChange.fromJSON(change)
+    doc._apply(change)
+  })
+  let htmlExporter = cfg.createExporter('html')
+  // Given that exportDocument returns an HTML string
+  return htmlExporter.exportDocument(doc)
+}
+
+cfg.setSnapshotBuilder(snapshotBuilder)
 cfg.setHost(process.env.HOST || 'localhost')
 cfg.setPort(process.env.PORT || 7777)
 
@@ -74,9 +100,7 @@ httpServer.on('request', app)
 */
 function _runSeed(cb) {
   console.info('Seeding database ...')
-  let changeStore = cfg.getChangeStore()
-  let snapshotStore = cfg.getSnapshotStore()
-  seed(changeStore, snapshotStore, cb)
+  seed(cfg, cb)
 }
 
 function _startServer(cb) {

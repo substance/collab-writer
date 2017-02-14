@@ -1,9 +1,8 @@
 import {
-  Configurator, CollabClient, WebSocketConnection,
-  JSONConverter, DocumentClient, CollabSession
+  Configurator, CollabClient, WebSocketConnection, DocumentClient, CollabSession
 } from 'substance'
 
-import { SimpleWriter, SimpleWriterPackage } from 'substance-simple-writer/index.es.js'
+import { SimpleWriter, SimpleWriterPackage } from 'substance-simple-writer/index.es.js'
 
 /*
   Configuration
@@ -11,11 +10,6 @@ import { SimpleWriter, SimpleWriterPackage } from 'substance-simple-writer/inde
 const EXAMPLE_DOCUMENT_ID = 'example-doc'
 const DOCUMENT_SERVER_URL = '/api/documents/'
 const WEBSOCKET_URL = 'ws://localhost:7777'
-
-/*
-  Used to convert a document snapshot (JSON) into a real document instance
-*/
-let jsonConverter = new JSONConverter()
 
 /*
   Collab engine endpoint
@@ -47,9 +41,8 @@ cfg.import(SimpleWriterPackage)
 window.onload = function() {
   documentClient.getDocument(EXAMPLE_DOCUMENT_ID, function(err, docRecord) {
     if (err) throw new Error(err)
-    let doc = cfg.createArticle()
-    jsonConverter.importDocument(doc, JSON.parse(docRecord.data))
-    debugger
+    let htmlImporter = cfg.createImporter('html')
+    let doc = htmlImporter.importDocument(docRecord.data)
     let collabSession = new CollabSession(doc, {
       configurator: cfg,
       documentId: EXAMPLE_DOCUMENT_ID,

@@ -1,27 +1,19 @@
-import { Configurator, JSONConverter, documentHelpers, series } from 'substance'
-import { SimpleWriterPackage } from 'substance-simple-writer'
+import { documentHelpers, series } from 'substance'
 import htmlFixture from './app/fixture'
 
-/*
-  Setup configurator
-*/
-let configurator = new Configurator()
-configurator.import(SimpleWriterPackage)
+export default function seed(configurator, cb) {
+  let changeStore = configurator.getChangeStore()
+  let snapshotStore = configurator.getSnapshotStore()
+  let htmlImporter = configurator.createImporter('html')
+  let doc = htmlImporter.importDocument(htmlFixture)
+  let initialChange = documentHelpers.getChangeFromDocument(doc).toJSON()
 
-let htmlImporter = configurator.createImporter('html')
-let doc = htmlImporter.importDocument(htmlFixture)
-let initialChange = documentHelpers.getChangeFromDocument(doc).toJSON()
-
-let jsonConverter = new JSONConverter()
-let v1Snapshot = jsonConverter.exportDocument(doc)
-
-export default function seed(changeStore, snapshotStore, cb) {
   series([
     (cb) => {
       changeStore.addChange('example-doc', initialChange, cb)
     },
     (cb) => {
-      snapshotStore.saveSnapshot('example-doc', 1, JSON.stringify(v1Snapshot), cb)
+      snapshotStore.saveSnapshot('example-doc', 1, htmlFixture, cb)
     }
   ], cb)
 }
