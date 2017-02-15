@@ -1,5 +1,4 @@
 var b = require('substance-bundler')
-let path = require('path')
 
 /*
   Sub-tasks
