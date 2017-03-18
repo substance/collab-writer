@@ -2,7 +2,7 @@
   "name": "substance-collab-writer",
   "description": "Reference implementation for a collaborative editor",
   "dependencies": {
-    "substance": "1.0.0-beta.6.2",
+    "substance": "1.0.0-beta.6.5",
     "substance-simple-writer": "1.0.0-beta.6"
   },
   "devDependencies": {
