@@ -4,7 +4,7 @@ import {
 } from 'substance'
 
 import { SimpleWriter, SimpleWriterPackage } from 'substance-simple-writer/index.es.js'
-import { ImagePackage, PersistencePackage } from 'substance'
+import { ImagePackage } from 'substance'
 
 /*
   Configuration
@@ -39,33 +39,12 @@ let documentClient = new DocumentClient({
   httpUrl: DOCUMENT_SERVER_URL
 })
 
-class SaveHandlerStub {
-  /*
-    Saving a document involves two steps.
-    - syncing files (e.g. images) with a backend
-    - storing a snapshot of the document's content (e.g. a XML serialization)
-  */
-  saveDocument(params) {
-    console.info('Simulating save ...', params)
-
-    return params.fileManager.sync()
-    .then(() => {
-      // Here you would run a converter (HTML/XML) usually
-      // and send the result to a REST endpoint.
-      console.info('Creating document snapshot...')
-    })
-  }
-}
-
 /*
   SimpleWriter configuration
 */
 let cfg = new Configurator()
 cfg.import(SimpleWriterPackage)
 cfg.import(ImagePackage)
-// Enable save button
-cfg.import(PersistencePackage)
-cfg.setSaveHandlerClass(SaveHandlerStub)
 
 window.onload = function() {
   documentClient.getDocument(EXAMPLE_DOCUMENT_ID, function(err, docRecord) {
