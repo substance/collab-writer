@@ -1,4 +1,4 @@
-import { Configurator, JSONConverter, documentHelpers, series } from 'substance'
+import { Configurator, JSONConverter, documentHelpers, series, getChangeFromDocument } from 'substance'
 import { SimpleWriterPackage } from 'substance-simple-writer'
 import htmlFixture from './app/fixture'
 
@@ -10,7 +10,7 @@ configurator.import(SimpleWriterPackage)
 
 let htmlImporter = configurator.createImporter('html')
 let doc = htmlImporter.importDocument(htmlFixture)
-let initialChange = documentHelpers.getChangeFromDocument(doc)
+let initialChange = getChangeFromDocument(doc)
 
 let jsonConverter = new JSONConverter()
 let v1Snapshot = jsonConverter.exportDocument(doc)
