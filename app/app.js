@@ -4,6 +4,7 @@ import {
 } from 'substance'
 
 import { SimpleWriter, SimpleWriterPackage } from 'substance-simple-writer/index.es.js'
+import { ImagePackage } from 'substance'
 
 /*
   Configuration
@@ -43,6 +44,7 @@ let documentClient = new DocumentClient({
 */
 let cfg = new Configurator()
 cfg.import(SimpleWriterPackage)
+cfg.import(ImagePackage)
 
 window.onload = function() {
   documentClient.getDocument(EXAMPLE_DOCUMENT_ID, function(err, docRecord) {
